@@ -1,4 +1,4 @@
-# rainbowsix7nightbot
+# R6S_Nightbot
 Rainbow 6: Siege chat commands for any Twitch.tv bot that has a an URI fetch command system.
 
 **Does not work with:** *Moobot and any bot without advanced custom command system and variables. (Note: you can run Nightbot alongside any moderating chat bot by just not giving Nightbot moderator privileges. Nightbot will still reply to custom chat commands.)*  
