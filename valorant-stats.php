@@ -52,7 +52,7 @@ switch ($request)
         // Valortant stat calls
         $kills = intval($base['data']['segments'][0]['stats']['kills']['value']);
 
-        echo urldecode($riotid) . " Stats: " . $kills . " ";
+        echo " Stats: " . $kills . " (" . urldecode($riotid) . ")";
     break;
     case "rank":
         $base = _getJSON('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/' . $player . '%23' . $tag);
