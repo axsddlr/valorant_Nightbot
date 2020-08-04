@@ -14,15 +14,15 @@ if (!$player)
     echo '\'&nick=\' parameter not defined!';
     return;
 };
-$id = $_GET['id'];
-if (!$id)
+$tag = $_GET['tag'];
+if (!$tag)
 {
-    echo '\'&id=\' parameter not defined!';
+    echo '\'&tag=\' parameter not defined!';
     return;
 };
 
-// combine the player name with id numnber i.e: rehkloos#001
-$rplayer = $player . '%23' . $id;
+// combine the player name with tag numnber i.e: rehkloos#001
+$riotid = $player . '%23' . $tag;
 
 function _getJSON($url)
 {
@@ -44,24 +44,24 @@ function _getJSON($url)
     return json_decode($curlRes, true);
 };
 
-if ($request == 'stats')
+switch ($request)
 {
+    case "stats":
+        $base = _getJSON('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/' . $player . '%23' . $tag);
 
-    $base = _getJSON('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/' . $player . '%23' . $id);
+        // Valortant stat calls
+        $kills = intval($base['data']['segments'][0]['stats']['kills']['value']);
 
-    // Valortant stat calls
-    $kills = intval($base['data']['segments'][0]['stats']['kills']['value']);
+        echo urldecode($riotid) . " Stats: " . $kills . " ";
+    break;
+    case "rank":
+        $base = _getJSON('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/' . $player . '%23' . $tag);
 
-    echo urldecode($rplayer) . " Stats: " . $kills . " ";
-};
+        // Valortant stat calls
+        $rank = $base['data']['segments'][0]['stats']['rank']['value'];
 
-if ($request == 'rank')
-{
-
-      $base = _getJSON('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/' . $player . '%23' . $id);
-
-      // Valortant stat calls
-      $rank = $base['data']['segments'][0]['stats']['rank']['value'];
-
-      echo $rank . " (" . urldecode($rplayer) . ")";
+        echo $rank . " (" . urldecode($riotid) . ")";
+    break;
+    default:
+        echo "need to add &command=stats or &command=rank";
 }
