@@ -18,38 +18,15 @@ function _getJSON($url)
     return json_decode($curlRes, true);
 };
 
-function timeSeconds($secs)
-{
-    if ($secs >= 86400)
-    {
-        $days = floor($secs / 86400);
-        $secs = $secs % 86400;
-        $r = $days . 'd';
-        if ($secs > 0)
-        {
-            $r .= ' ';
-        }
-    }
-    if ($secs >= 3600)
-    {
-        $hours = floor($secs / 3600);
-        $secs = $secs % 3600;
-        $r .= $hours . 'h';
-        if ($secs > 0)
-        {
-            $r .= ' ';
-        }
-    }
-    if ($secs >= 60)
-    {
-        $minutes = floor($secs / 60);
-        $secs = $secs % 60;
-        $r .= $minutes . 'm';
-        if ($secs > 0)
-        {
-            $r .= ' ';
-        }
-    }
-    return $r;
+function timeplayed($ss) {
+$s = $ss%60;
+$m = floor(($ss%3600)/60);
+$h = floor(($ss%86400)/3600);
+$d = floor(($ss%2592000)/86400);
+$M = floor($ss/2592000);
+
+//return "$M months, $d days, $h hours, $m minutes, $s seconds";
+return "$d d $h h $m m $s s";
 }
+
 ?>
