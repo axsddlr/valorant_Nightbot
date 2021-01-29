@@ -9,6 +9,13 @@ if (!$request)
     return;
 };
 
+$region = $_GET['region'];
+if (!$region)
+{
+    echo '\'&region=\' parameter not defined!';
+    return;
+};
+
 $player = $_GET['nick'];
 if (!$player)
 {
@@ -42,12 +49,13 @@ switch ($request)
         echo "Total Time Played: " . $TTP . " | Wins: " . $wins . " | Win/Loss: " . $winr . " | Kills: " . $kills . " | KDR: " . $kdr . " | Deaths: " . $deaths ." (" . urldecode($riotid) . ")";
     break;
     case "rank":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
+        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/mmr/' . $region . '/' . $player . '/' . $tag);
 
         // Valortant stat calls
-        $rank = $base['stats']['rank'];
+        $rank = $base['data']['currenttierpatched'];
+        $elo = $base['data']['elo'];
 
-        echo $rank . " (" . urldecode($riotid) . ")";
+        echo "Current Rank: " . $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
     break;
     case "time":
         $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
