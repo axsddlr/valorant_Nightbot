@@ -15,7 +15,6 @@ if (!$region)
     echo '\'&region=\' parameter not defined!';
     return;
 };
-
 $player = $_GET['nick'];
 if (!$player)
 {
@@ -56,6 +55,15 @@ switch ($request)
         $elo = $base['data']['elo'];
 
         echo "Current Rank: " . $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+    break;
+    case "tracker":
+        $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
+
+        // Valortant stat calls
+        $rank = $base['stats']['rank'];
+        // $elo = $base['data']['elo'];
+
+        echo "Current Rank: " . $rank . " (" . urldecode($riotid) . ")";
     break;
     case "time":
         $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
