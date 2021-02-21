@@ -48,13 +48,16 @@ switch ($request)
         echo "Total Time Played: " . $TTP . " | Wins: " . $wins . " | Win/Loss: " . $winr . " | Kills: " . $kills . " | KDR: " . $kdr . " | Deaths: " . $deaths ." (" . urldecode($riotid) . ")";
     break;
     case "rank":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/mmr/' . $region . '/' . $player . '/' . $tag);
+        // $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/mmr/' . $region . '/' . $player . '/' . $tag);
+        $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
 
         // Valortant stat calls
-        $rank = $base['data']['currenttierpatched'];
-        $elo = $base['data']['elo'];
+        // $rank = $base['data']['currenttierpatched'];
+        // $elo = $base['data']['elo'];
+        $rank = $base['stats']['rank'];
 
-        echo "Current Rank: " . $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+        // echo "Current Rank: " . $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+        echo "Current Rank: " . $rank . " (" . urldecode($riotid) . ")";
     break;
     case "tracker":
         $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
