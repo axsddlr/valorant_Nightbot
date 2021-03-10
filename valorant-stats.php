@@ -48,11 +48,11 @@ switch ($request)
         echo "Total Time Played: " . $TTP . " | Wins: " . $wins . " | Win/Loss: " . $winr . " | Kills: " . $kills . " | KDR: " . $kdr . " | Deaths: " . $deaths ." (" . urldecode($riotid) . ")";
     break;
     case "rank":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/mmr/' . $region . '/' . $player . '/' . $tag);
+        $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/mmr/' . $region . '/' . $player . '/' . $tag);
 
         // Valortant stat calls
-        $rank = $base['data']['currenttierpatched'];
-        $elo = $base['data']['elo'];
+        $rank = $base['data']['current_data']['currenttierpatched'];
+        $elo = $base['data']['current_data']['elo'];
 
         echo $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
     break;
