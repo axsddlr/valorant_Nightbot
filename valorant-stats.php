@@ -1,84 +1,86 @@
 <?php
-include('./utils/functions.php');
+include ('./utils/functions.php');
 header('Content-type: text/plain');
 
 $request = strtolower($_GET['command']);
 if (!$request)
-{
+  {
     echo '\'&command=\' parameter not defined! (Options: \'rank\', \'stats\')';
     return;
-};
+  };
 
 $region = $_GET['region'];
 if (!$region)
-{
+  {
     echo '\'&region=\' parameter not defined!';
     return;
-};
+  };
 $player = $_GET['nick'];
 if (!$player)
-{
+  {
     echo '\'&nick=\' parameter not defined!';
     return;
-};
+  };
 $tag = $_GET['tag'];
 if (!$tag)
-{
+  {
     echo '\'&tag=\' parameter not defined!';
     return;
-};
+  };
 
 // combine the player name with tag numnber i.e: rehkloos#001
 $riotid = $player . '%23' . $tag;
 
 switch ($request)
-{
-    case "stats":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
+  {
+case "stats":
+    $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
 
-        // Valortant stat calls
-        $kills = $base['stats']['kills'];
-        $deaths = $base['stats']['deaths'];
-        $kdr = $base['stats']['kdratio'];
-        $wins = $base['stats']['wins'];
-        $winr  = $base['stats']['winpercentage'];
-        $TTP = $base['stats']['playtime']['playtimepatched'];
+    // Valortant stat calls
+    $kills = $base['stats']['kills'];
+    $deaths = $base['stats']['deaths'];
+    $kdr = $base['stats']['kdratio'];
+    $wins = $base['stats']['wins'];
+    $winr = $base['stats']['winpercentage'];
+    $TTP = $base['stats']['playtime']['playtimepatched'];
 
+    echo "Total Time Played: " . $TTP . " | Wins: " . $wins . " | Win/Loss: " . $winr . " | Kills: " . $kills . " | KDR: " . $kdr . " | Deaths: " . $deaths . " (" . urldecode($riotid) . ")";
+break;
+case "rank":
+    $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/mmr/' . $region . '/' . $player . '/' . $tag);
 
-        echo "Total Time Played: " . $TTP . " | Wins: " . $wins . " | Win/Loss: " . $winr . " | Kills: " . $kills . " | KDR: " . $kdr . " | Deaths: " . $deaths ." (" . urldecode($riotid) . ")";
-    break;
-    case "rank":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/mmr/' . $region . '/' . $player . '/' . $tag);
+    // Valortant stat calls
+    $rank = $base['data']['current_data']['currenttierpatched'];
+    $elo = $base['data']['current_data']['elo'];
 
-        // Valortant stat calls
-        $rank = $base['data']['current_data']['currenttierpatched'];
-        $elo = $base['data']['current_data']['elo'];
-
-        if ($rank == True) {
-            echo $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
-        } else if ($rank == False) {
-            $rank = $base['data']['by_season']['e2a2']['final_rank_patched'];
-            echo $rank . " (" . urldecode($riotid) . ")";
-        }
-    break;
-    case "tracker":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
-
-        // Valortant stat calls
-        $rank = $base['stats']['rank'];
-        // $elo = $base['data']['elo'];
-
+    if ($rank == True)
+      {
+        echo $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+      }
+    else if ($rank == False)
+      {
+        // current season: Episode 2 Act 2
+        $rank = $base['data']['by_season']['e2a2']['final_rank_patched'];
         echo $rank . " (" . urldecode($riotid) . ")";
+      }
     break;
-    case "time":
-        $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
+case "tracker":
+    $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
 
-        // Valortant stat calls
-        $TTP = $base['stats']['playtime']['playtimepatched'];
-
-
-        echo "Total Time Played: " . $TTP . " (" . urldecode($riotid) . ")";
+    // Valortant stat calls
+    $rank = $base['stats']['rank'];
+    // $elo = $base['data']['elo'];
+    echo $rank . " (" . urldecode($riotid) . ")";
     break;
-    default:
-        echo "need to add &command=stats, &command=rank, or &command=time";
-}
+case "time":
+    $base = _getJSON('https://api.henrikdev.xyz/valorant/v1/profile/' . $player . '/' . $tag);
+
+    // Valortant stat calls
+    $TTP = $base['stats']['playtime']['playtimepatched'];
+
+    echo "Total Time Played: " . $TTP . " (" . urldecode($riotid) . ")";
+    break;
+default:
+    echo "need to add &command=stats, &command=rank, or &command=time";
+  }
+
