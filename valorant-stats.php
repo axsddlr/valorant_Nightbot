@@ -54,7 +54,12 @@ switch ($request)
         $rank = $base['data']['current_data']['currenttierpatched'];
         $elo = $base['data']['current_data']['elo'];
 
-        echo $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+        if ($rank == True) {
+            echo $rank . " | Elo: " . $elo . " (" . urldecode($riotid) . ")";
+        } else if ($rank == False) {
+            $rank = $base['data']['by_season']['e2a2']['final_rank_patched'];
+            echo $rank . " (" . urldecode($riotid) . ")";
+        }
     break;
     case "tracker":
         $base = _getJSON('https://api.henrikdev.xyz/valorant/v2/profile/' . $player . '/' . $tag);
